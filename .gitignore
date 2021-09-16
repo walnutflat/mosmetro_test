@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 news_parser/*.log
+
+.idea
