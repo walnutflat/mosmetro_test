@@ -14,13 +14,13 @@ def main():
     logger.add(LOG_FILE)
     logger.warning('Старт парсера новостей')
 
-    conn = make_connection(logger)
+    conn = make_connection()
     if not conn:
         logger.warning('Остановка парсера новостей')
         return
 
     try:
-        max_id = get_last_id(logger, conn)
+        max_id = get_last_id(conn)
         logger.info(f'Получен id последней новости = {max_id}')
 
         all_news = parse_all_news(NEWS_URL, max_id)

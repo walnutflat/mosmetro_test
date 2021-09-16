@@ -2,7 +2,7 @@
 
 """Функции парсинга.
 """
-
+from datetime import datetime
 from typing import Optional
 
 import requests
@@ -71,6 +71,7 @@ def parse_one_news(news: BeautifulSoup) -> dict:
         'url_pic': BASE_URL + url_pic,
         'url_news': BASE_URL + url_news,
         'date': date,
+        'parsed_at': datetime.now(),
     }
 
 
