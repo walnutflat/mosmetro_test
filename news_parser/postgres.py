@@ -3,21 +3,6 @@
 """Функции для работы с БД.
 """
 
-# -- auto-generated definition
-# create table metro_news
-# (
-#     news_id   integer not null
-#         constraint metro_news_pkey
-#             primary key,
-#     header    text,
-#     url_pic   varchar,
-#     url_news  varchar,
-#     date      date,
-#     parsed_at timestamp
-# );
-#
-# alter table metro_news
-#     owner to postgres;
 from typing import Optional
 
 import psycopg2 as psycopg2
