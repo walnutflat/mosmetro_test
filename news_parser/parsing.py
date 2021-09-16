@@ -1,7 +1,14 @@
+# -*- coding: utf-8 -*-
+
+"""Функции парсинга.
+"""
+
 from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
+
+from news_parser.config import BASE_URL
 
 MONTHS = {
     'января': '01',
@@ -29,8 +36,8 @@ def get_html(url: str) -> Optional[str]:
     return resp.text
 
 
-def parse_all_news(news_url: str) -> list:
-    """Распарсить все новости на странице.
+def parse_all_news(news_url: str, max_id: int = 0) -> list:
+    """Распарсить все новости на странице, поулчаем новости с id > max_id.
     """
     html = get_html(news_url)
     if not html:
@@ -42,6 +49,8 @@ def parse_all_news(news_url: str) -> list:
     res = []
     for news in all_news:
         one_news_dict = parse_one_news(news)
+        if one_news_dict['news_id'] <= max_id:
+            break
         res.append(one_news_dict)
 
     return res
@@ -53,15 +62,15 @@ def parse_one_news(news: BeautifulSoup) -> dict:
     header = news.find('span', class_='newslist__text-title').text
     url_pic = news.find('img', class_='newslist__image')['src']
     url_news = news.find('a', class_='newslist__link')['href']
-    date = parse_news_date("https://mosmetro.ru" + url_news)
+    date = parse_news_date(BASE_URL + url_news)
     news_id = int(url_news.split('/')[3])
 
     return {
-        'header': header,
-        'url_pic': url_pic,
-        'url_news': url_news,
-        'date': date,
         'news_id': news_id,
+        'header': header,
+        'url_pic': BASE_URL + url_pic,
+        'url_news': BASE_URL + url_news,
+        'date': date,
     }
 
 
