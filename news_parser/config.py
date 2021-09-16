@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Конфигурация.
+"""
 import os
 
 NEWS_URL = "https://mosmetro.ru/press/news/"
