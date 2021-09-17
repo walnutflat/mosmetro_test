@@ -1,0 +1,2 @@
+POSTGRES_PASSWORD=123456
+DB_NAME='postgresql://postgres:123456@db_postgres:5432/postgres'

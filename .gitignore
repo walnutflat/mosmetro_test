@@ -131,3 +131,4 @@ dmypy.json
 news_parser/*.log
 
 .idea
+db_postgres/*
