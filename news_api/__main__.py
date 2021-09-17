@@ -4,7 +4,7 @@
 """
 from flask import Flask
 
-from news_api.config import DB_NAME
+from news_api.config import DB_NAME, HOST
 from news_api.methods import get_news
 from news_api.models import db
 
@@ -17,4 +17,4 @@ db.init_app(app)
 app.add_url_rule('/metro/news', 'news', get_news)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host=HOST, debug=True)

@@ -1,0 +1,17 @@
+# Докерфайл для модуля API
+# docker build -t news_parser -f Dockerfile_news_parser .
+# docker run --rm --name news_parser news_parser
+
+FROM python:3.8
+
+WORKDIR /home/
+
+COPY news_parser/* ./news_parser/
+COPY requirements.txt .
+
+RUN pip install \
+    --no-cache-dir -r requirements.txt
+
+ENV CONTAINER_NAME news_parser
+
+CMD exec python3 -m news_parser

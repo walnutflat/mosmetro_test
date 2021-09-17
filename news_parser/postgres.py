@@ -34,6 +34,8 @@ def save_news(logger, session, all_news: list) -> Optional[int]:
         logger.error(exc)
         return 0
 
+    return len(all_news)
+
 
 
 
