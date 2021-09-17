@@ -1,0 +1,18 @@
+# Докерфайл для модуля API
+# docker build -t news_api -f Dockerfile_news_api .
+
+FROM python:3.8
+
+WORKDIR /home/
+
+COPY . .
+#COPY requirements.txt .
+
+RUN pip install \
+    --no-cache-dir -r requirements.txt
+
+ENV CONTAINER_NAME news_api
+
+EXPOSE 5000
+
+CMD exec python3 -m news_api

@@ -17,4 +17,4 @@ db.init_app(app)
 app.add_url_rule('/metro/news', 'news', get_news)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
