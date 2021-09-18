@@ -5,8 +5,9 @@
 from time import sleep
 
 from loguru import logger
+from sqlalchemy.exc import SQLAlchemyError
 
-from news_parser.config import NEWS_URL, LOG_FILE, SLEEP_MINUTES
+from news_parser.config import NEWS_URL, LOG_FILE, SLEEP_TO_RETRY_SEC, SLEEP_SECONDS
 from news_parser.models import Session, engine
 from news_parser.parsing import parse_all_news
 from news_parser.postgres import get_last_id, save_news
@@ -20,9 +21,10 @@ def main():
     logger.warning('Старт парсера новостей')
 
     while True:
-        handle()
-        logger.info(f'Ожидание {SLEEP_MINUTES} минут')
-        sleep(SLEEP_MINUTES * 60)
+        retry = handle()
+        sleep_time = SLEEP_TO_RETRY_SEC if retry else SLEEP_SECONDS
+        logger.info(f'Ожидание {sleep_time} секунд')
+        sleep(sleep_time)
 
 
 def handle():
@@ -30,6 +32,7 @@ def handle():
     """
     session = Session()
     logger.info('Начало нового круга')
+    retry = False
 
     try:
         max_id = get_last_id(session)
@@ -42,9 +45,14 @@ def handle():
             count = save_news(logger, session, all_news)
             logger.info(f'Сохранено {count} новостей с сайта')
 
+    except SQLAlchemyError as exc:
+        retry = True
+        logger.error(f'Ошибка БД: {exc}')
+
     finally:
         engine.dispose()
         logger.info('Окончание круга')
+        return retry
 
 
 if __name__ == '__main__':

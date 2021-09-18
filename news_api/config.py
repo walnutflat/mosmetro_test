@@ -10,5 +10,10 @@ if not DB_NAME:
 
 if os.name == 'nt':
     HOST = '127.0.0.1'
+    APP_MODE = 'development'
 else:
     HOST = '0.0.0.0'
+    APP_MODE = 'production'
+
+PORT = 5000
+

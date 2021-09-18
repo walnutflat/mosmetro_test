@@ -9,7 +9,7 @@ services:
     env_file:
       - environment
     volumes:
-      - .:/home/logs/
+      - ./logs/:/home/logs/
     depends_on:
       - db_postgres
 

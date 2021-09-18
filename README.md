@@ -8,33 +8,10 @@
 API для получения новостей из БД. Лучших практик по Flask так же не знаю. При наличии времени уделил бы больше внимания логированию (видел, как прикрутить тот же loguru). Получение данных через ORM. По необходимости на реальном проекте также можно (нужно) организовать запуск как wsgi через gunicorn.
 
 ### БД
-Предполагается использование postgresql 11. Структура таблицы:
-```
- create table metro_news
- (
-     news_id   integer not null
-         constraint metro_news_pkey
-             primary key,
-     header    text,
-     url_pic   varchar,
-     url_news  varchar,
-     date      date,
-     parsed_at timestamp
- );
-
- alter table metro_news
-     owner to postgres;
-```
+Используется контейнер postgres:11, данные БД вынесены через volume, инициализация проходит скриптом init.sql.
 
 ### Запуск
-Каждый из модулей предполагается к запуску в докере в отдельном контейнере. На реальном проекте для модулей нужно было бы сделать разные requirements.txt, но для ускорения здесь один. БД предполагается отдельностоящая, но можно запустить все вместе в контейнерах (сделать новый образ из postgres:11 с init скриптом на базе описания выше) с docker-compose, 
-данные БД указываются в файле конфигурации. На реальном проекте вынес бы в переменную окружения.
-
+Запуск через оркестратор docker-compose.
 ```
-docker build -t news_api -f Dockerfile_news_api .
-docker build -t news_parser -f Dockerfile_news_parser .
-
-docker run --rm --name news_parser news_parser
-docker run --rm --name news_api -p 5000:5000 news_api
-
+docker-compose up -d --build
 ```

@@ -5,11 +5,24 @@
 from datetime import datetime, timedelta
 
 from flask import request, jsonify
+from sqlalchemy.exc import SQLAlchemyError
 
 from news_api.models import NewsModel
 
 
 def get_news():
+    """Получить новости из БД. Безопасная обертка.
+    """
+    res = []
+    try:
+        res = _get_news()
+    except SQLAlchemyError as exc:
+        print(f'Ошибка БД: {exc}')
+    finally:
+        return jsonify(res)
+
+
+def _get_news():
     """Получить новости из БД.
     """
     day = request.args.get('day')
@@ -23,4 +36,4 @@ def get_news():
 
     news = news.all()
 
-    return jsonify([x.as_dict for x in news])
+    return [x.as_dict for x in news]
